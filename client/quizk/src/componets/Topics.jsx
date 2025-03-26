@@ -2,7 +2,7 @@ import React from 'react'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 
-function Topics({settopicid,topicid,  subjectid}) {
+function Topics({settopicid,topicid,  subjectid, setshowquestions}) {
     const [data, setdata] = useState([])
 
     useEffect(() => {
@@ -27,6 +27,10 @@ function Topics({settopicid,topicid,  subjectid}) {
 
           console.log(topicid);
     }
+
+    const handlequestionclick = ()=>{
+   setshowquestions(true);
+    }
     
   return (
     <div>
@@ -40,8 +44,9 @@ function Topics({settopicid,topicid,  subjectid}) {
           ))
         }
       </ul>
+
+      <button onClick={handlequestionclick} className=' bg-green-400'>Confirm</button>
     </div>
   )
 }
-
 export default Topics

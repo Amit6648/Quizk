@@ -14,12 +14,8 @@ function Questions({question, useranswers, handleclick}) {
                     <input type='radio' name={question?._id}
                       value={option}
                       checked={useranswers[question?._id] === option}
-                      onChange={() => handleclick(question?._id, option)}
-
-                    />
+                      onChange={() => handleclick(question?._id, option)}/>
                     <label> {option}</label>
-
-
                   </li>
                 ))
               }

@@ -7,12 +7,13 @@ function App() {
 
   const [subjectid, setsubjectid] = useState(null)
   const [topicid, settopicid] = useState([])
+  const [showquestions, setshowquestions] = useState(false)
 
   return (
     <>
     <Subjects setsubjectid={setsubjectid}/>
-     {subjectid &&(<Topics subjectid={subjectid} settopicid={settopicid} topicid={topicid}/>)}
-     {topicid.length>0&&(<Quizarea topicid={topicid}/>)}
+     {subjectid &&(<Topics subjectid={subjectid} settopicid={settopicid} topicid={topicid} setshowquestions={setshowquestions}/>)}
+     {showquestions &&(<Quizarea topicid={topicid}/>)}
      
     </>
   )
