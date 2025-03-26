@@ -1,18 +1,18 @@
 import { useState, useEffect } from 'react'
-import Quizarea from './componets/quizarea'
+import Quizarea from './componets/Quizarea'
 import Topics from './componets/Topics'
 import Subjects from './componets/Subjects'
 
 function App() {
 
   const [subjectid, setsubjectid] = useState(null)
-  const [topicid, settopicid] = useState(null)
+  const [topicid, settopicid] = useState([])
 
   return (
     <>
     <Subjects setsubjectid={setsubjectid}/>
-     {subjectid &&(<Topics subjectid={subjectid} settopicid={settopicid}/>)}
-     {topicid&&(<Quizarea topicid={topicid}/>)}
+     {subjectid &&(<Topics subjectid={subjectid} settopicid={settopicid} topicid={topicid}/>)}
+     {topicid.length>0&&(<Quizarea topicid={topicid}/>)}
      
     </>
   )

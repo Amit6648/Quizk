@@ -36,9 +36,19 @@ app.get('/subjects/:subjectId', async (req, res) => {
 })
 
 app.get('/subjects/topics/:topicId', async (req, res) => {
-    const {topicId} = req.params;
-    const questiondata = await questions.find({topicId});
-    res.json(questiondata);
+
+    
+
+        try {
+            const topicIds = req.params.topicId.split(',');
+            const questiondata = await questions.find({topicId:{$in : topicIds}});
+            res.json(questiondata);
+        } catch (error) {
+            console.log(error);
+        }
+  
+   
+   
 })
 
 

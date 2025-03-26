@@ -2,7 +2,7 @@ import React from 'react'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 
-function Topics({settopicid, subjectid}) {
+function Topics({settopicid,topicid,  subjectid}) {
     const [data, setdata] = useState([])
 
     useEffect(() => {
@@ -14,6 +14,19 @@ function Topics({settopicid, subjectid}) {
             
         })
     }, [subjectid])
+
+    const selecttopics =(tid)=>{
+          settopicid(prev=>{
+            if (prev.includes(tid)) {
+              return prev.filter(id=>id !== tid)
+            }
+            else{
+              return [...prev, tid];
+            }
+          })
+
+          console.log(topicid);
+    }
     
   return (
     <div>
@@ -22,7 +35,8 @@ function Topics({settopicid, subjectid}) {
       <ul>
         {
           data.map(topic=>(
-            <li key={topic._id}><button onClick={()=>{settopicid(topic._id)}} className='bg-pink-400'>{topic.name}</button></li>
+            <li key={topic._id}><label>
+              <input type="checkbox" checked={topicid.includes(topic._id)} onChange={()=>{selecttopics(topic._id)}}/> {topic.name}</label></li>
           ))
         }
       </ul>

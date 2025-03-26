@@ -6,7 +6,7 @@ function Questions({question, useranswers, handleclick}) {
         <ul className='flex flex-col gap-5'>
 
           <li className='flex flex-col gap-2.5'>
-            <p className='text-yellow-400 font-bold text-4xl'>{question?.question || "question is loading"}</p>
+            <p className='text-yellow-400 font-bold text-4xl'>{question?.text || "question is loading"}</p>
             <ul>
               {
                 question?.options?.map((option, index) => (

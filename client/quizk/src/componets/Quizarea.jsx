@@ -9,6 +9,7 @@ function Quizarea({topicid}) {
     const [index, setindex] = useState(0)
     const [ans, setans] = useState(false)
     const [result, setresult] = useState([])
+    const [key, setkey] = useState(0)
   
   
     const handleclick = (quid, option) => {
@@ -21,14 +22,17 @@ function Quizarea({topicid}) {
   
       }));
     };
+
+    
   
   
     const anscheck = () => {
   
       let res = data.map(ques => {
         const select = useranswers[ques._id];
+        setkey(key+1);
         return {
-          question: ques.question,
+          question: ques.text,
           selectedans: select || "no answer",
           correct: select === ques.correctAnswer,
           answer: ques.correctAnswer,
@@ -74,7 +78,7 @@ function Quizarea({topicid}) {
         <ul className='flex flex-col gap-4'>
         {result.map(res => (
           
-            <li>
+            <li key={key}>
               <p className='bg-gray-500'>{res.question}</p>
               <p className={`${res.correct ? "bg-green-500" : "bg-red-400"}`}>{res.selectedans}</p>
               <p className='bg-amber-500'>{res.answer}</p>
