@@ -5,9 +5,23 @@ const app = express();
 const subjects = require("./data/subjects");
 const topics = require("./data/topics");
 const questions = require('./data/questions');
+const users = require('./data/userdata');
+const session =  require('express-session')
+const bcrypt  = require('bcrypt');
+const passport = require('passport');
 require('dotenv').config();
+require('./auth/pasport')
 app.use(express.json());
 app.use(cors());
+
+app.use(session({
+    secret : "little one",
+    resave : false,
+    saveUninitialized : false
+}))
+app.use(passport.initialize())
+app.use(passport.session())
+
 
 
 mongoose.connect(process.env.mongo).then(() => {
@@ -18,6 +32,56 @@ mongoose.connect(process.env.mongo).then(() => {
 
 app.get('/', (req, res) => {
     res.send("kela");
+})
+
+app.post('/registor',async (req,res)=>{
+    const {name, email,password} = req.body;
+    const hashedpass = await bcrypt.hash(password, 10);
+try {
+    const updated =  await users.create({
+        name,
+        email,
+        password: hashedpass
+    })
+
+    res.status(201).json({email: updated.email,  name : updated.name})
+} catch (error) {
+    console.log(error)
+}
+   
+
+})
+
+app.post('/login', (req,res)=>{
+    passport.authenticate('local', (error, user, info)=>{
+        if (error) {
+            return res.status(500).json({error : "there is a error"});
+
+             }
+
+
+             if (!user) {
+               return res.status(401).json(info);
+             }
+
+            req.logIn(user,(error)=>{
+                if (error) {
+                    return res.status(500).json({error: "again somthing broke"})
+                }
+             return res.status(200).json({name:user.name, email: user.email})
+                
+            })
+    })(req,res);
+})
+
+app.get('/me', (req,res)=>{
+    if (req.isAuthenticated()) {
+        res.json({id: req.user._id});
+    }
+
+    else{
+        res.status(500).json({error:"there is something worng"})
+    }
 })
 
 
