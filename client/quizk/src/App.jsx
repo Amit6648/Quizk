@@ -1,21 +1,26 @@
 import { useState, useEffect } from 'react'
-import Quizarea from './componets/Quizarea'
-import Topics from './componets/Topics'
-import Subjects from './componets/Subjects'
+import { BrowserRouter as Router, Routes, Link, Route } from 'react-router-dom'
+import Home from './componets/Home'
+import Login from './componets/Registor'
+import Welcomepage from './componets/Welcomepage'
+import Registor from './componets/Registor'
 
 function App() {
 
-  const [subjectid, setsubjectid] = useState(null)
-  const [topicid, settopicid] = useState([])
-  const [showquestions, setshowquestions] = useState(false)
+
 
   return (
-    <>
-    <Subjects setsubjectid={setsubjectid}/>
-     {subjectid &&(<Topics subjectid={subjectid} settopicid={settopicid} topicid={topicid} setshowquestions={setshowquestions}/>)}
-     {showquestions &&(<Quizarea topicid={topicid}/>)}
-     
-    </>
+
+
+<Router>
+<Routes>
+
+<Route path='/' element={<Welcomepage/>}/>
+<Route path='/registor' element={<Registor/>}/>
+
+</Routes>
+</Router> 
+
   )
 }
 

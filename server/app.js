@@ -12,7 +12,10 @@ const passport = require('passport');
 require('dotenv').config();
 require('./auth/pasport')
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:5173', // Allow requests from Vite frontend
+  credentials: true // Allow cookies and authentication headers
+}));
 
 app.use(session({
     secret : "little one",
@@ -84,6 +87,15 @@ app.get('/me', (req,res)=>{
     }
 })
 
+app.post('/logout', (req,res)=>{
+  try {
+    req.logOut();
+    res.status(200).json('logout done')
+    
+  } catch (error) {
+    res.send(500).json({error:"there is a error"});
+  }
+})
 
 app.get('/subjects', async (req, res) => {
 
