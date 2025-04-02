@@ -8,7 +8,7 @@ import Registor from './componets/Registor'
 function App() {
 
 
-
+// from guri laptop
   return (
 
 
