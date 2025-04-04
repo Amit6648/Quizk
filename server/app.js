@@ -93,7 +93,7 @@ app.post('/logout', (req,res)=>{
     res.status(200).json('logout done')
     
   } catch (error) {
-    res.send(500).json({error:"there is a error"});
+    res.status(500).json({error:"there is a error"});
   }
 })
 
