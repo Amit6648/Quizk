@@ -5,6 +5,7 @@ import Welcomepage from './componets/Welcomepage'
 import Registor from './componets/Registor'
 import Login from './componets/Login'
 import Navbar from './componets/Navbar'
+import ProtectedRoute from './Hooks/Protectedroute'
 
 
 function App() {
@@ -20,7 +21,9 @@ function App() {
 <Route path='/' element={<Welcomepage/>}/>
 <Route path='/registor' element={<Registor/>}/>
 <Route path='/login' element = {<Login/>}/>
-<Route path='/navbar' element = {<Navbar/>}/>
+<Route path='/navbar' element = {<ProtectedRoute>
+  <Navbar/>
+</ProtectedRoute>}/>
 
 </Routes>
 </Router> 

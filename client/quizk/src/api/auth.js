@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const api = axios.create({
+export const api = axios.create({
     baseURL : "http://localhost:3000",
     withCredentials: true
 });
@@ -11,4 +11,4 @@ export const login = (email,password)=> api.post('/login', {email,password});
 
 export const logout = ()=> api.post('/logout');
 
-export const detail  = ()=> api.post('/me');
+export const detail  = ()=> api.get('/me');

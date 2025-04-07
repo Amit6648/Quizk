@@ -1,16 +1,17 @@
 // AuthContext.js
 import React, { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
+import { api } from "../api/auth";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     // Check session by calling a protected endpoint
-    axios.get("http://localhost:5000/protected", { withCredentials: true })
+    api.get("/me", { withCredentials: true })
       .then((response) => {
         setIsAuthenticated(true);
       })
@@ -20,7 +21,7 @@ export const AuthProvider = ({ children }) => {
       .finally(() => {
         setLoading(false);
       });
-  }, []);
+  }, [isAuthenticated]);
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>

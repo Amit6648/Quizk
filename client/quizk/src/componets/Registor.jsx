@@ -21,7 +21,6 @@ function Registor() {
       className="mt-6 w-full py-3 bg-gray-200 rounded-lg"
       placeholder="username"
       value={name}
-
       onChange={e=>setname(e.target.value)}
     />
      <input

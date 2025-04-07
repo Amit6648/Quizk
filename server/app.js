@@ -17,11 +17,18 @@ app.use(cors({
   credentials: true // Allow cookies and authentication headers
 }));
 
+app.set("trust proxy", 1); // important if using reverse proxies (e.g., Vite dev server)
+
 app.use(session({
-    secret : "little one",
-    resave : false,
-    saveUninitialized : false
-}))
+    secret: "little one",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        sameSite: 'lax', // use 'none' if using HTTPS
+        secure: false    // true if HTTPS, false for localhost
+    }
+}));
+
 app.use(passport.initialize())
 app.use(passport.session())
 
