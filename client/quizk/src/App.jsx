@@ -6,6 +6,10 @@ import Registor from './componets/Registor'
 import Login from './componets/Login'
 import Navbar from './componets/Navbar'
 import ProtectedRoute from './Hooks/Protectedroute'
+import MainPage from './componets/MainPage'
+
+import Quizarea from './componets/Quizarea'
+import MultiplayerQuiz from './componets/MultiplayerQuiz'
 
 
 function App() {
@@ -15,20 +19,29 @@ function App() {
   return (
 
 
+
+
+<>
+
 <Router>
 <Routes>
 
 <Route path='/' element={<Welcomepage/>}/>
 <Route path='/registor' element={<Registor/>}/>
 <Route path='/login' element = {<Login/>}/>
-<Route path='/navbar' element = {<ProtectedRoute>
-  <Navbar/>
+<Route path='/home' element = {<ProtectedRoute>
+  <Home/>
+
 </ProtectedRoute>}/>
 
 </Routes>
 </Router> 
 
+</>
+
   )
 }
 
 export default App
+
+

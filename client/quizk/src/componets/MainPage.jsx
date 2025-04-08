@@ -1,5 +1,7 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
+import Navbar from './Navbar'
+
 
 const subjects = [
   "OOP",
@@ -33,6 +35,7 @@ export default function MainPage() {
   const [selected, setSelected] = useState(null);
 
   return (
+<>
     <div className="min-h-screen  p-6 flex flex-col items-start">
 
       <motion.div
@@ -58,5 +61,6 @@ export default function MainPage() {
 
 
     </div>
+    </>
   );
 }
