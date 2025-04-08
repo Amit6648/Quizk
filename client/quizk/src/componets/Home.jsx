@@ -20,7 +20,7 @@ function Home() {
 
   return (
     <div>
-      <Navbar/>
+   
       {step === 1 && <Subjects setsubjectid={setsubjectid} />}
       {step === 2 && (
         <Topics

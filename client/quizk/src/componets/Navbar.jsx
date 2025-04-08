@@ -1,14 +1,21 @@
-import { useState } from "react";
 import { motion } from "framer-motion";
+import { Link, useLocation } from "react-router-dom";
 
 export default function FullWidthNavbar() {
-  const [activeTab, setActiveTab] = useState("Home");
-  const tabs = ["Home", "Multiplayer", "Leaderboard", "Profile"];
+  const location = useLocation();
+
+  const tabs = [
+    { name: "Home", path: "/home" },
+    { name: "Multiplayer", path: "/multiplayer" },
+    { name: "Leaderboard", path: "/leaderboard" },
+    { name: "Profile", path: "/profile" }
+  ];
+
+  const activeIndex = tabs.findIndex(tab => tab.path === location.pathname);
   const tabCount = tabs.length;
   const tabWidth = 100 / tabCount;
 
   const getBackgroundSegments = () => {
-    const activeIndex = tabs.indexOf(activeTab);
     const isFirst = activeIndex === 0;
     const isLast = activeIndex === tabCount - 1;
 
@@ -21,12 +28,12 @@ export default function FullWidthNavbar() {
     }
 
     return [
-      { 
+      {
         width: tabWidth * activeIndex,
         left: 0,
         radiusClass: "rounded-br-xl"
       },
-      { 
+      {
         width: tabWidth * (tabCount - activeIndex - 1),
         left: tabWidth * (activeIndex + 1),
         radiusClass: "rounded-bl-xl"
@@ -49,18 +56,18 @@ export default function FullWidthNavbar() {
         />
       ))}
 
-      {tabs.map((tab) => (
-        <button
-          key={tab}
+      {tabs.map((tab, index) => (
+        <Link
+          to={tab.path}
+          key={tab.name}
           className={`relative z-10 flex-1 px-1 py-2 text-sm text-center whitespace-nowrap ${
-            activeTab === tab 
-              ? "text-blue-500 font-medium" 
+            activeIndex === index
+              ? "text-blue-500 font-medium"
               : "text-white"
           }`}
-          onClick={() => setActiveTab(tab)}
         >
-          {tab}
-        </button>
+          {tab.name}
+        </Link>
       ))}
     </div>
   );

@@ -1,11 +1,11 @@
 import React from 'react'
 
 
-export default function MultiplayerQuiz() {
+export default function Profile() {
   return (
     <div>
- 
-      Coming soon
+      
+      coming soon
     </div>
   )
 }
