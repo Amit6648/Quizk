@@ -11,7 +11,8 @@ const bcrypt  = require('bcrypt');
 const passport = require('passport');
 const http = require('http');
 const {Server} = require('socket.io');
-const { Socket } = require('dgram');
+const { log } = require('console');
+
 require('dotenv').config();
 require('./auth/pasport')
 app.use(express.json());
@@ -29,105 +30,59 @@ const io = new Server(server, {
     }
 })
 
-const rooms= {};
 
 
 
-function getRandomQuestions(limit = 10) {
-  return questions.aggregate([{ $sample: { size: limit } }]);
-}
+const rooms = {};
 
 io.on('connection', (socket) => {
-  console.log("user connected:", socket.id);
+console.log("Hello man");
 
-  socket.on('create-room', async (hostname) => {
-    const roomId = Math.random().toString(36).substring(2, 8);
-    rooms[roomId] = {
-      host: socket.id,
-      players: [{ id: socket.id, name: hostname, score: 0 }],
-      currentQuestionIndex: 0,
-      questions: [],
-      answersReceived: {}
-    };
+socket.on('create-room', ({name, roomid})=>{
 
-    socket.join(roomId);
-    socket.emit('room-created', roomId);
-  });
+    socket.roomid = roomid;
 
-  socket.on('join-room', async ({ name, roomId }) => {
-    const room = rooms[roomId];
-    if (!room || room.players.length >= 2) {
-      socket.emit('room-error', 'Room not available');
-      return;
+    socket.join(roomid);
+
+    rooms[roomid] = { players:[{
+        id : socket.id, 
+        name : name,
+        score : 0
+    }
+    ]
     }
 
-    room.players.push({ id: socket.id, name, score: 0 });
-    socket.join(roomId);
 
-    io.to(roomId).emit('room-joined', room.players.map(p => p.name));
+    console.log(`${name} has created the room`)
+})
 
-    // Fetch questions and start quiz
-    room.questions = await getRandomQuestions(10);
-    sendQuestion(roomId);
-  });
+socket.on('join-room', ({name, roomid})=>{
+    socket.roomid = roomid;
+    socket.join(roomid);
+    const player = {id:socket.id, name:name, score:0};
+    rooms[roomid].players.push(player);
+    console.log(`${name} has joined the room `)
 
-  socket.on('submit-answer', ({ roomId, answer }) => {
-    const room = rooms[roomId];
-    if (!room) return;
+    io.to(roomid).emit('players-joined', rooms[roomid].players)
 
-    const currentQ = room.questions[room.currentQuestionIndex];
-    const player = room.players.find(p => p.id === socket.id);
-    if (!player) return;
+  
+})
 
-    // Save answer
-    room.answersReceived[socket.id] = answer;
+socket.on('start-game', async()=>{
+    const roomid = socket.roomid;
+    console.log('game will start');
+    const gamequestions = await questions.aggregate([{ $sample: { size: 10 } }]);
+    io.to(roomid).emit('start-trigger', gamequestions );
+})
 
-    // If both players answered
-    if (Object.keys(room.answersReceived).length === 2) {
-      room.players.forEach(p => {
-        if (room.answersReceived[p.id] === currentQ.correctAnswer) {
-          p.score += 1;
-        }
-      });
-
-      room.currentQuestionIndex++;
-      room.answersReceived = {};
-
-      if (room.currentQuestionIndex >= room.questions.length) {
-        const winner = room.players.reduce((a, b) => a.score > b.score ? a : b);
-        io.to(roomId).emit('quiz-finished', {
-          players: room.players,
-          winner: winner.name
-        });
-      } else {
-        sendQuestion(roomId);
-      }
-    }
-  });
-
-  socket.on('disconnect', () => {
-    for (let roomId in rooms) {
-      rooms[roomId].players = rooms[roomId].players.filter(p => p.id !== socket.id);
-      if (rooms[roomId].players.length === 0) delete rooms[roomId];
-    }
-  });
-
-  function sendQuestion(roomId) {
-    const room = rooms[roomId];
-    const question = room.questions[room.currentQuestionIndex];
-    const { text, options } = question;
-    io.to(roomId).emit('new-question', {
-      index: room.currentQuestionIndex + 1,
-      total: room.questions.length,
-      text,
-      options
-    });
-  }
+socket.on('player-ans', async (answer)=>{
+    console.log(answer.current.questionId)
+     const real = await questions.findById(answer.current.questionId);
+     console.log(real);
+     
+})
 });
 
-
-
-app.set("trust proxy", 1); // important if using reverse proxies (e.g., Vite dev server)
 
 app.use(session({
     secret: "little one",
@@ -227,8 +182,6 @@ app.get('/subjects/:subjectId', async (req, res) => {
 })
 
 app.get('/subjects/topics/:topicId', async (req, res) => {
-
-    
 
         try {
             const topicIds = req.params.topicId.split(',');

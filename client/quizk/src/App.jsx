@@ -29,7 +29,7 @@ function Layout() {
         <Route path='/login' element={<Login />} />
 
         <Route path='/home' element={<ProtectedRoute><Home /></ProtectedRoute>} />
-        <Route path='/multiplayer' element={<ProtectedRoute><MultiplayerQuiz /></ProtectedRoute>} />
+        <Route path='/multiplayer' element={<MultiplayerQuiz />} />
         <Route path='/profile' element={<ProtectedRoute><Profile /></ProtectedRoute>} />
         <Route path='/leaderboard' element={<ProtectedRoute><Leaderboard /></ProtectedRoute>} />
       </Routes>
