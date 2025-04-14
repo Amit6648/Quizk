@@ -12,6 +12,7 @@ export default function MultiplayerQuiz() {
   const [mode, setmode] = useState('menu')
   const [players, setplayers] = useState([])
   const [ishost, setishost] = useState(false)
+  const [scoreinfo, setscoreinfo] = useState([])
   
    const [questions, setQuestions] = useState([]);
     const [userAnswers, setUserAnswers] = useState({});
@@ -29,6 +30,8 @@ const currentans = useRef({})
         questionId : questionId,
         option : option
       };
+
+      console.log(currentans.current.questionId)
 
       
 
@@ -82,6 +85,14 @@ const currentans = useRef({})
       setmode('game')
       
     })
+
+    socket.on('update-score', (info)=>{
+      setscoreinfo(info)
+
+      console.log(info)
+    } )
+
+   
 
   }, [])
 
@@ -169,7 +180,22 @@ const currentans = useRef({})
           )}
 
           {!submitted ? (
+  
             <>
+
+            <div>
+             {
+              scoreinfo.map(info=>(
+                <div>
+
+                  <p>player name is {info.name}</p>
+                  <p>player name is {info.score}</p>
+                </div>
+                
+
+              ))
+             }
+            </div>
               {currentQ ? (
                 <div className="bg-[#ddf2fd] p-6 rounded-3xl shadow-md">
                   <p className="text-lg font-semibold mb-6 text-black">
